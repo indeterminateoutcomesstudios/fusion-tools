@@ -14,6 +14,8 @@
 - http://www.grey-company.org/Circle/language/com2elv.htm
 ### Audio
 - http://www.ambient-mixer.com/
+- http://www.tabletopaudio.com/#
+- https://incompetech.com/music/royalty-free/music.html
 ### Random Generators
 - http://www.apolitical.info/webgame/tables
 - http://donjon.bin.sh/
@@ -54,6 +56,10 @@
 - https://docs.google.com/document/d/1gwlJEh8hI63FzppPtbjpOeaxhbNuDENvWl4uowgq9RM/mobilebasic
 ## PC Tools
 - http://dicecloud.com/
+- http://www.digitaldungeonmaster.com/dd-5e-character-sheets.html
+- http://dungeonsmaster.com/pre-generated-character-library-dndnext/
+- http://dnd.wizards.com/articles/features/character_sheets
+- http://chicken-dinner.com/5e/5e-point-buy.html#triton&NA&14&10&15&10&8&14&0&0&27&15&8&19&15&12&9&7&5&4&3&2&1&0&1&2&4&6&9
 ### Spell References
 - http://thebombzen.github.io/grimoire/
 - http://dndbits.com/spells.php
@@ -61,3 +67,4 @@
 ### Rule References
 - http://5thsrd.org/
 - http://dndbits.com/index.php
+- https://crobi.github.io/dnd5e-quickref/preview/quickref.html
