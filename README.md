@@ -31,6 +31,7 @@
 - http://www.wizards.com/dnd/hook/Welcome.asp#
 - http://dndhook.madbs.in/
 - http://anydice.com/
+- http://inkwellideas.com/free-tools
 ### Monster Reference
 - http://surfarcher.blogspot.com/2014/07/d-5e-monsters-master-index.html
 - http://chisaipete.github.io/bestiary/
