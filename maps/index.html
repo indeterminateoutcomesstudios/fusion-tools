@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<!-- https://stackoverflow.com/questions/8449716/cross-origin-requests-are-only-supported-for-http-but-its-not-cross-domain/23118676#23118676 -->
+<html>
+    <head>
+        <title>Campaign Map Scale</title>
+        <style type="text/css">
+            * { margin:0; padding:0; box-sizing:border-box; overflow:hidden;}
+        </style>
+        <script src="jquery-3.3.1.js"></script>
+        <script src="svg.js"></script>
+        <script src="svg.panzoom.js"></script>
+        <script>
+            var min_zoom =  0.3;
+            var max_zoom = 75.0;
+            $(document).ready(function() {
+                var svgmap = SVG('svgmap').panZoom({zoomMin:min_zoom, zoomMax:max_zoom});
+                $.get('hex_regions.svg', function(contents) {
+                    var $tmp = $('svg', contents);
+                    svgmap.svg($tmp.html());
+                    // svgmap.attr('viewBox', $tmp.attr('viewBox'));
+                    svgmap.attr('width', $(window).width());
+                    svgmap.attr('height', $(window).height());
+                }, 'xml');
+                console.log()
+                svgmap.zoom(1).animate().zoom(2, {x:1000, y:1000});
+                console.log(svgmap.zoom());
+                $(window).resize(function() {
+                    // This will execute whenever the window is resized
+                    svgmap.attr('height', $(window).height()); // New height
+                    svgmap.attr('width',  $(window).width()); // New width
+                });
+                svgmap.on('zoom', function(ev) {
+                    console.log(svgmap.zoom(), svgmap);
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div id="svgmap"></div>
+    </body>
+</html>

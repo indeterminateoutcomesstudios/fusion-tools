@@ -1,0 +1,38 @@
+{
+  "name": "svg.panzoom.js",
+  "version": "1.2.0",
+  "description": "A plugin for svg.js that enables panzoom for viewport elements",
+  "main": "dist/svg.panzoom.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/svgdotjs/svg.panzoom.js.git"
+  },
+  "keywords": [
+    "svg.js",
+    "panzoom"
+  ],
+  "author": "Ulrich-Matthias Schäfer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/svgdotjs/svg.panzoom.js/issues"
+  },
+  "homepage": "https://github.com/svgdotjs/svg.panzoom.js#readme",
+  "dependencies": {
+    "svg.js": "^2.6.2"
+  },
+  "devDependencies": {
+    "del": "^3.0.0",
+    "gulp": "^3.9.1",
+    "gulp-header": "^1.8.8",
+    "gulp-iife": "^0.3.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-standard": "^10.0.0",
+    "gulp-trimlines": "^1.0.1",
+    "gulp-uglify": "^3.0.0",
+    "gulp-wrap-iife": "0.0.1"
+  }
+}
