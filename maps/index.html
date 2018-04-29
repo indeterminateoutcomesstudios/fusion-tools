@@ -4,13 +4,30 @@
     <head>
         <title>Campaign Map Scale</title>
         <style type="text/css">
-            * { margin:0; padding:0; box-sizing:border-box; overflow:hidden;}
+            * {
+                margin:0; 
+                padding:0; 
+                box-sizing:border-box; 
+                overflow:hidden;
+            }
+            #nav-svg {
+                width:20%;
+                /*background-color: rgba(0, 0, 0, 0.5);*/
+                font-family: sans-serif;
+                color: grey;
+                bottom:0;
+                position: absolute;
+                overflow: hidden;
+                padding: 10px;
+                /*padding-right: 70px;*/
+                list-style: none;
+            }
         </style>
         <script src="jquery-3.3.1.js"></script>
         <script src="svg.js"></script>
         <script src="svg.panzoom.js"></script>
         <script>
-            var min_zoom =  0.3;
+            var min_zoom =  0.033;
             var max_zoom = 75.0;
             $(document).ready(function() {
                 var svgmap = SVG('svgmap').panZoom({zoomMin:min_zoom, zoomMax:max_zoom});
@@ -21,21 +38,43 @@
                     svgmap.attr('width', $(window).width());
                     svgmap.attr('height', $(window).height());
                 }, 'xml');
-                console.log()
-                svgmap.zoom(1).animate().zoom(2, {x:1000, y:1000});
-                console.log(svgmap.zoom());
+                // svgmap.zoom(1).animate().zoom(2, {x:1000, y:1000});
+
+                var legend = $('#nav-svg');
+
                 $(window).resize(function() {
                     // This will execute whenever the window is resized
                     svgmap.attr('height', $(window).height()); // New height
                     svgmap.attr('width',  $(window).width()); // New width
                 });
+                var cur_zoom = svgmap.zoom();
                 svgmap.on('zoom', function(ev) {
-                    console.log(svgmap.zoom(), svgmap);
+                    cur_zoom = svgmap.zoom();
+                    console.log(cur_zoom);
+                    if (cur_zoom < 0.04) {
+                        legend.text('World Scale: 1 hex = 21600 miles | travel time = 2.5 years');
+                    } else if (cur_zoom < 0.10) {
+                        legend.text('Continent Scale: 1 hex = 3600 miles | travel time = 150 days');
+                    } else if (cur_zoom < 0.70) {
+                        legend.text('Kingdom Scale: 1 hex = 360 miles | travel time = 15 days');
+                    } else if (cur_zoom < 2.5) {
+                        legend.text('Province Scale: 1 hex = 90 miles | travel time = 3.75 days');
+                    } else if (cur_zoom < 9.0) {
+                        legend.text('Atlas Scale: 1 hex = 24 miles | travel time = 8 hours (1 day Normal Pace)');
+                    } else if (cur_zoom < 40.0) {
+                        legend.text('Township Scale: 1 hex = 6 miles | travel time = 2 hours');
+                    } else if (cur_zoom < 50.0) {
+                        legend.text('Local Scale: 1 hex = 1 mile | travel time = 20 minutes');
+                    } else {
+                        legend.text('Ground Scale: 1 hex = 1/6 mile | travel time = 3\'33" minutes | Use square movement!')
+                    }
                 });
             });
         </script>
     </head>
     <body>
-        <div id="svgmap"></div>
+        <div id="svgmap">
+            <div id="nav-svg"><div>
+        </div>
     </body>
 </html>

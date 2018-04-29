@@ -29,17 +29,17 @@ hex_scale = { #    mi/hex  travel time     5e name             approx to OSR
     # 'micro'    :      1/36, #   
 }
 
-            single  tile    
-size        world   continent   kingdom     province    equinox     atlas   township    local    ground
-world       1       1/6         
-continent   6       1           
-kingdom     60      10          1           
-province    360     60          6           1           
-equinox     600     100         10          5/3 (1.166) 1
-atlas       900     150         15          5/2 (2.500) 3/2 (1.500) 1       
-township    3600    600         60          10          6           4       1
-local       21600   3600        360         60          36          24      6           1
-ground      129600  21600       2160        360         216         144     36          6       1
+#             single  tile    
+# size        world   continent   kingdom     province    equinox     atlas   township    local    ground
+# world       1       1/6         
+# continent   6       1           
+# kingdom     60      10          1           
+# province    360     60          6           1           
+# equinox     600     100         10          5/3 (1.166) 1
+# atlas       900     150         15          5/2 (2.500) 3/2 (1.500) 1       
+# township    3600    600         60          10          6           4       1
+# local       21600   3600        360         60          36          24      6           1
+# ground      129600  21600       2160        360         216         144     36          6       1
 
 # Scale conversion for DF maps (square to hex)
 # pixel to hex (https://www.redblobgames.com/grids/hexagons/)
@@ -59,41 +59,4 @@ if __name__ == '__main__':
     if a.text:
         with open(a.text, 'r') as text_map:
             print(text_map.read())
-
-
-
-
-
-    mi/hex                          
-world   21600.0000  21600.0000                      
-continent   3600.0000   3600.0000                       
-kingdom 360.0000    360.0000                        
-province    96.0000 60.0000                     
-equinox     36.0000                     
-atlas   24.0000 24.0000                     
-township    6.0000  6.0000                      
-local   1.0000  1.0000                      
-ground  0.1667  0.1667                      
-                                
-                                
-                                
-                                
-            world   continent   kingdom province    atlas   township    local   ground
-world       1       
-continent   6       1           
-kingdom     60      10          1       
-province    225     38          4       1           
-atlas       900     150         15      4           1
-township    3600    600         60      16          4       1   
-local       21600   3600        360     96.00       24      6           1   
-ground      129600  21600       2160    576.00      144     36          6       1
-                                
-                                
-                                
-    6   ground  1   local               
-    6   local   1   township                
-    4   township    1   atlas               
-    2.5 atlas   1   province                
-    6   province    1   kingdom             
-    10  kingdom 1   continent               
-    6   continent   1   world               
+            
