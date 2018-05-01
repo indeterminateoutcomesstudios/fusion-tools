@@ -10,8 +10,12 @@
                 box-sizing:border-box; 
                 overflow:hidden;
             }
+            #svgmap {
+            	display: block;
+            	margin: auto;
+            }
             #nav-svg {
-                width:20%;
+                width:50%;
                 /*background-color: rgba(0, 0, 0, 0.5);*/
                 font-family: sans-serif;
                 color: grey;
@@ -28,19 +32,28 @@
         <script src="svg.panzoom.js"></script>
         <script>
             var min_zoom =  0.033;
+            var con_zoom =  0.05;
+            var kin_zoom =  0.16;
+            var pro_zoom =  0.60;
+            var atl_zoom =  0.60;
+            var tow_zoom =  2.50;
+            var loc_zoom = 10.00;
+            var gnd_zoom = 70.00;
             var max_zoom = 75.0;
             $(document).ready(function() {
                 var svgmap = SVG('svgmap').panZoom({zoomMin:min_zoom, zoomMax:max_zoom});
                 $.get('hex_regions.svg', function(contents) {
                     var $tmp = $('svg', contents);
                     svgmap.svg($tmp.html());
-                    // svgmap.attr('viewBox', $tmp.attr('viewBox'));
+                    svgmap.attr('viewBox', $tmp.attr('viewBox'));
                     svgmap.attr('width', $(window).width());
                     svgmap.attr('height', $(window).height());
                 }, 'xml');
                 // svgmap.zoom(1).animate().zoom(2, {x:1000, y:1000});
 
-                var legend = $('#nav-svg');
+                var label = $('#nav-label');
+                var scale = $('#nav-scale');
+                var time = $('#nav-time');
 
                 $(window).resize(function() {
                     // This will execute whenever the window is resized
@@ -50,23 +63,39 @@
                 var cur_zoom = svgmap.zoom();
                 svgmap.on('zoom', function(ev) {
                     cur_zoom = svgmap.zoom();
-                    console.log(cur_zoom);
-                    if (cur_zoom < 0.04) {
-                        legend.text('World Scale: 1 hex = 21600 miles | travel time = 2.5 years');
-                    } else if (cur_zoom < 0.10) {
-                        legend.text('Continent Scale: 1 hex = 3600 miles | travel time = 150 days');
-                    } else if (cur_zoom < 0.70) {
-                        legend.text('Kingdom Scale: 1 hex = 360 miles | travel time = 15 days');
-                    } else if (cur_zoom < 2.5) {
-                        legend.text('Province Scale: 1 hex = 90 miles | travel time = 3.75 days');
-                    } else if (cur_zoom < 9.0) {
-                        legend.text('Atlas Scale: 1 hex = 24 miles | travel time = 8 hours (1 day Normal Pace)');
-                    } else if (cur_zoom < 40.0) {
-                        legend.text('Township Scale: 1 hex = 6 miles | travel time = 2 hours');
-                    } else if (cur_zoom < 50.0) {
-                        legend.text('Local Scale: 1 hex = 1 mile | travel time = 20 minutes');
+                    // console.log(cur_zoom);.
+                    if (cur_zoom < con_zoom) {
+                        label.text('World Scale');
+                        scale.text('1 hex = 20,736 miles');
+                        time.text('travel time = 2.4 years');
+                    } else if (cur_zoom < kin_zoom) {
+                        label.text('Continent Scale');
+                        scale.text('1 hex = 3,456 miles');
+                        time.text('travel time = 144 days');
+                    } else if (cur_zoom < pro_zoom) {
+                        label.text('Kingdom Scale');
+                        scale.text('1 hex = 576 miles');
+                        time.text('travel time = 24 days');
+                    } else if (cur_zoom < atl_zoom) {
+                        label.text('Province Scale');
+                        scale.text('1 hex = 96 miles');
+                        time.text('travel time = 4 days');
+                    } else if (cur_zoom < tow_zoom) {
+                        label.text('Atlas Scale');
+                        scale.text('1 hex = 24 miles');
+                        time.text('travel time = 1 day (8 Hours & Rest at normal pace)');
+                    } else if (cur_zoom < loc_zoom) {
+                        label.text('Township Scale');
+                        scale.text('1 hex = 6 miles');
+                        time.text('travel time = 2 hours');
+                    } else if (cur_zoom < gnd_zoom) {
+                        label.text('Local Scale');
+                        scale.text('1 hex = 1 mile');
+                        time.text('travel time = 20 minutes');
                     } else {
-                        legend.text('Ground Scale: 1 hex = 1/6 mile | travel time = 3\'33" minutes | Use square movement!')
+                        label.text('Ground Scale');
+                        scale.text('1 hex = 1/6 mile');
+                        time.text('travel time = 3 minutes 33 seconds (Use square movement!)')
                     }
                 });
             });
@@ -74,7 +103,11 @@
     </head>
     <body>
         <div id="svgmap">
-            <div id="nav-svg"><div>
+            <div id="nav-svg">
+            	<div id="nav-label"></div>
+            	<div id="nav-scale"></div>
+            	<div id="nav-time"></div>
+            <div>
         </div>
     </body>
 </html>
