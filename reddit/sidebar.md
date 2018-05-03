@@ -1,14 +1,17 @@
 ##Tagline
 Description
 ***
-#Faq
+#FAQ
  * post1
  * post2
+
 #Posting guidelines
- *only memes
+ * only memes
  * Artist - Title [genre]
-#Comunity
+
+#Community
  * irc
+
 # Related subreddit
  * r/modhelp
  * r/help
