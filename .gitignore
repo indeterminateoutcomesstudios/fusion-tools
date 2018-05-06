@@ -1,3 +1,10 @@
+# Credentials
+*.cred
+*.json
+
+# sqlite3 database file
+*.db
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

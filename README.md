@@ -1,3 +1,36 @@
+# fusion-tools
+This is a collection of code, tools, and information to support running a "West Marches" 5e D&D campaign using modern tools and spiced to my tastes.
+
+## setup
+- Have Python 3.3.* as default version on OS (`python`)
+- At base of repository run: 
+    + `python -m venv venv`
+    + Activate your venv: `. ./venv/bin/activate` or `venv\Scripts\activate.bat`
+    + `pip install --upgrade pip`
+    + `pip install -r requirements.txt`
+<!-- - Use the following shebang: `#!/usr/bin/env python` -->
+- Before running any script, activate your venv: `./venv/bin/activate`
+- Before releasing, use pip freeze > requirements.txt
+    + remove `pkg-resources` line from requirements.txt
+- To run tests: `python -m unittest discover`
+- To run tests with coverage: `coverage run -m unittest discover`
+- To generate coverage report: `coverage html --omit="*/venv*"`
+- View report by opening: `./htmlcov/index.html`
+- You'll need to provide credentials for each piece of the flow to work
+    + Oauth tokens will be used for most authetication
+- These credentials should be stored in *.cred files in the `credentials` directory
+- At work, you'll need to `set http_proxy=http://...` and `set https_proxy=http://...` to punch through that proxy
+- Also, in a Windows terminal, you may encounter issues when echoing unicode characters for debug purposes, so execute the following: `chcp 65001`
+
+Now all scripts should reference the version of python in that venv, install all additional libs from that path
+
+## attribution
+- 
+
+## docs
+- http://praw.readthedocs.io/en/latest/index.html
+- 
+
 # Helpful Link Index
 - https://www.dndbeyond.com/ [official online references/tools]
 ## DM Tools
