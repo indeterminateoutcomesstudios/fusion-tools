@@ -38,7 +38,7 @@
         <type label="Bit" length="0" sql="bit" quote=""/>
     </group>
 </datatypes><table x="300" y="500" name="player">
-<row name="id" null="1" autoincrement="1">
+<row name="id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="reddit" row="player_id" />
 <relation table="discord" row="player_id" />
@@ -56,33 +56,25 @@
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
-<comment>Contains unique ids for human players</comment>
 </table>
 <table x="500" y="650" name="reddit">
-<row name="player_id" null="1" autoincrement="1">
+<row name="player_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <row name="account" null="1" autoincrement="0">
 <datatype>MEDIUMTEXT</datatype>
 <default>NULL</default></row>
-<key type="PRIMARY" name="">
-<part>player_id</part>
-</key>
-<comment>maps playerid to reddit username</comment>
 </table>
 <table x="500" y="750" name="discord">
-<row name="player_id" null="1" autoincrement="1">
+<row name="player_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <row name="account" null="1" autoincrement="0">
 <datatype>MEDIUMTEXT</datatype>
 <default>NULL</default></row>
-<key type="PRIMARY" name="">
-<part>player_id</part>
-</key>
 </table>
 <table x="300" y="900" name="game">
-<row name="id" null="1" autoincrement="1">
+<row name="id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <key type="PRIMARY" name="">
@@ -90,7 +82,7 @@
 </key>
 </table>
 <table x="300" y="50" name="character">
-<row name="id" null="1" autoincrement="1">
+<row name="id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <row name="player_id" null="1" autoincrement="0">
@@ -102,22 +94,22 @@
 </key>
 </table>
 <table x="500" y="500" name="token">
-<row name="player_id" null="1" autoincrement="1">
+<row name="player_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="player" row="id" />
 </row>
-<row name="author_token" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
+<row name="date" null="1" autoincrement="0">
+<datatype>DATE</datatype>
 <default>NULL</default></row>
 <row name="player_token" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
-<key type="PRIMARY" name="">
-<part>player_id</part>
-</key>
+<row name="author_token" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
 </table>
 <table x="500" y="200" name="wealth">
-<row name="character_id" null="1" autoincrement="1">
+<row name="character_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="character" row="id" />
 </row>
@@ -127,12 +119,9 @@
 <row name="gold_value" null="1" autoincrement="0">
 <datatype>FLOAT</datatype>
 <default>NULL</default></row>
-<key type="PRIMARY" name="">
-<part>character_id</part>
-</key>
 </table>
 <table x="500" y="50" name="experience">
-<row name="character_id" null="1" autoincrement="1">
+<row name="character_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="character" row="id" />
 </row>
@@ -142,12 +131,9 @@
 <row name="amount" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
-<key type="PRIMARY" name="">
-<part>character_id</part>
-</key>
 </table>
 <table x="500" y="350" name="inventory">
-<row name="character_id" null="1" autoincrement="1">
+<row name="character_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="character" row="id" />
 </row>
@@ -157,36 +143,29 @@
 <row name="name" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
-<key type="PRIMARY" name="">
-<part>character_id</part>
-</key>
 </table>
-<table x="500" y="1100" name="map">
-<row name="id" null="1" autoincrement="1">
+<table x="700" y="1100" name="map">
+<row name="id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
-<default>NULL</default></row>
+<default>NULL</default><relation table="post" row="id" />
+</row>
 <row name="game_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="game" row="id" />
 </row>
-<key type="PRIMARY" name="">
-<part>id</part>
-</key>
 </table>
-<table x="500" y="1000" name="write_up">
-<row name="id" null="1" autoincrement="1">
+<table x="700" y="1000" name="write_up">
+<row name="post_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
-<default>NULL</default></row>
+<default>NULL</default><relation table="post" row="id" />
+</row>
 <row name="game_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="game" row="id" />
 </row>
-<key type="PRIMARY" name="">
-<part>id</part>
-</key>
 </table>
 <table x="100" y="1000" name="game_pcs">
-<row name="game_id" null="1" autoincrement="1">
+<row name="game_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="game" row="id" />
 </row>
@@ -194,12 +173,9 @@
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="character" row="id" />
 </row>
-<key type="PRIMARY" name="">
-<part>game_id</part>
-</key>
 </table>
 <table x="100" y="900" name="game_dms">
-<row name="game_id" null="1" autoincrement="1">
+<row name="game_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="game" row="id" />
 </row>
@@ -207,12 +183,12 @@
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="player" row="id" />
 </row>
-<key type="PRIMARY" name="">
-<part>game_id</part>
-</key>
 </table>
 <table x="500" y="900" name="post">
-<row name="id" null="1" autoincrement="1">
+<row name="id" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="reddit_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <row name="game_id" null="1" autoincrement="0">

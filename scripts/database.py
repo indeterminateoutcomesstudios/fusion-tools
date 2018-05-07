@@ -19,49 +19,48 @@ class Backend():
         self.cursor = self.connection.cursor()
         
     def execute(self, command=''):
-        ''''''
         self.cursor.execute(command)
-    
+
+    def executescript(self, script=''):
+        if script:
+            self.cursor.executescript(script)
+
     def fetchone(self):
-        ''''''
         return self.cursor.fetchone()
 
     def fetchall(self):
-        ''''''
         return self.cursor.fetchall()
     
     def commit(self):
-        ''''''
         self.connection.commit()
     
     def close(self):
-        ''''''
         self.connection.close()
         
-    def initialize_db(self):
-        ''''''
-        self.execute('''create table post (post_id)''')
-        # self.execute('''create table inventory (barcode integer, bgg_id integer)''')
-        # self.execute('''create table history (barcode integer, wwid integer, time_out datetime, time_in datetime, auto_in integer)''')
+    def initialize_db(self, schema='schema.sqlite'):
+        '''Read and create tables from sqlite schema definition'''
+        with open(schema, 'rt') as sf:
+            schema = sf.read()
+        self.executescript(schema)
         self.commit()
     
     def destroy_db(self):
         '''Drop tables to effectively clear/reset database'''
-        try:
-            self.execute('''drop table post''')
-        except sqlite3.OperationalError:
-            pass
-        # try:
-        #     self.execute('''drop table history''')
-        # except sqlite3.OperationalError:
-        #     pass
+        for table in self.get_tables():
+            self.execute('''drop table {}'''.format(table))
         self.commit()
-            
-    def dump_to_csv(self, table_name='history'):
-        '''Write the contents of the specified table to a csv file'''
+
+    def backup_db(self):
+        pass
+
+    def restore_db(self):
+        pass
+
+    def dump_db_to_csv(self):
+        '''serialize all tables to human-readable format'''
         pass
     
-    def format_table(self, table_name='history'):
+    def format_table(self, table_name=''):
         '''return the contents of the specified table as a formatted string'''
         self.execute('''select * from {}'''.format(table_name))
         return pp.pformat(self.fetchall())
@@ -69,19 +68,15 @@ class Backend():
     def reset_table(self):
         '''Reset/clear the contents of the specified table'''
         pass
-        
-    def get_history(self):
-        ''''''
-        return self.format_table('history')
-    
-    def get_posts(self):
-        ''''''
-        return self.format_table('post')
+
+    def get_tables(self):
+        self.execute("""select name from sqlite_master where type = 'table'""")
+        ts = self.fetchall()
+        return [t[0] for t in ts]
         
     def check_db(self):
         '''Function to sanity check that tables exist in the database'''
-        self.execute("""select name from sqlite_master where type = 'table'""")
-        tables = self.fetchall()
+        tables = self.get_tables()
         if tables:
             return True
         else:

@@ -1,0 +1,96 @@
+CREATE TABLE `player` (
+  `id` INTEGER NULL DEFAULT NULL,
+  `fullname` MEDIUMTEXT NULL DEFAULT NULL,
+  `email` MEDIUMTEXT NULL DEFAULT NULL,
+  `phone` INTEGER NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (id) REFERENCES `reddit` (`player_id`),
+  FOREIGN KEY (id) REFERENCES `discord` (`player_id`)
+);
+
+CREATE TABLE `reddit` (
+  `player_id` INTEGER NULL DEFAULT NULL,
+  `account` MEDIUMTEXT NULL DEFAULT NULL
+);
+
+CREATE TABLE `discord` (
+  `player_id` INTEGER NULL DEFAULT NULL,
+  `account` MEDIUMTEXT NULL DEFAULT NULL
+);
+
+CREATE TABLE `game` (
+  `id` INTEGER NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `character` (
+  `id` INTEGER NULL DEFAULT NULL,
+  `player_id` INTEGER NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (player_id) REFERENCES `player` (`id`)
+);
+
+CREATE TABLE `token` (
+  `player_id` INTEGER NULL DEFAULT NULL,
+  `date` DATE NULL DEFAULT NULL,
+  `player_token` INTEGER NULL DEFAULT NULL,
+  `author_token` INTEGER NULL DEFAULT NULL,
+  FOREIGN KEY (player_id) REFERENCES `player` (`id`)
+);
+
+CREATE TABLE `wealth` (
+  `character_id` INTEGER NULL DEFAULT NULL,
+  `date` DATE NULL DEFAULT NULL,
+  `gold_value` FLOAT NULL DEFAULT NULL,
+  FOREIGN KEY (character_id) REFERENCES `character` (`id`)
+);
+
+CREATE TABLE `experience` (
+  `character_id` INTEGER NULL DEFAULT NULL,
+  `date_awarded` DATE NULL DEFAULT NULL,
+  `amount` INTEGER NULL DEFAULT NULL,
+  FOREIGN KEY (character_id) REFERENCES `character` (`id`)
+);
+
+CREATE TABLE `inventory` (
+  `character_id` INTEGER NULL DEFAULT NULL,
+  `date` DATE NULL DEFAULT NULL,
+  `name` INTEGER NULL DEFAULT NULL,
+  FOREIGN KEY (character_id) REFERENCES `character` (`id`)
+);
+
+CREATE TABLE `map` (
+  `id` INTEGER NULL DEFAULT NULL,
+  `game_id` INTEGER NULL DEFAULT NULL,
+  FOREIGN KEY (id) REFERENCES `post` (`id`),
+  FOREIGN KEY (game_id) REFERENCES `game` (`id`)
+);
+
+CREATE TABLE `write_up` (
+  `post_id` INTEGER NULL DEFAULT NULL,
+  `game_id` INTEGER NULL DEFAULT NULL,
+  FOREIGN KEY (post_id) REFERENCES `post` (`id`),
+  FOREIGN KEY (game_id) REFERENCES `game` (`id`)
+);
+
+CREATE TABLE `game_pcs` (
+  `game_id` INTEGER NULL DEFAULT NULL,
+  `character_id` INTEGER NULL DEFAULT NULL,
+  FOREIGN KEY (game_id) REFERENCES `game` (`id`),
+  FOREIGN KEY (character_id) REFERENCES `character` (`id`)
+);
+
+CREATE TABLE `game_dms` (
+  `game_id` INTEGER NULL DEFAULT NULL,
+  `dm_id` INTEGER NULL DEFAULT NULL,
+  FOREIGN KEY (game_id) REFERENCES `game` (`id`),
+  FOREIGN KEY (dm_id) REFERENCES `player` (`id`)
+);
+
+CREATE TABLE `post` (
+  `id` INTEGER NULL DEFAULT NULL,
+  `reddit_id` INTEGER NULL DEFAULT NULL,
+  `game_id` INTEGER NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (game_id) REFERENCES `game` (`id`)
+);
