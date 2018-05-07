@@ -8,7 +8,7 @@ This is a collection of code, tools, and information to support running a "West 
     + Activate your venv: `. ./venv/bin/activate` or `venv\Scripts\activate.bat`
     + `pip install --upgrade pip`
     + `pip install -r requirements.txt`
-<!-- - Use the following shebang: `#!/usr/bin/env python` -->
+- Use the following shebang: `#!/usr/bin/env python`
 - Before running any script, activate your venv: `./venv/bin/activate`
 - Before releasing, use pip freeze > requirements.txt
     + remove `pkg-resources` line from requirements.txt

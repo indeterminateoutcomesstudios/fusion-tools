@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 #generic interfaces and objects for working with the subreddit
 import credentials
 import praw
@@ -7,6 +9,7 @@ import praw
 
 # register account with players/PCs
 # add player accounts to subreddit
+
 # check for new posts
 # if post is a flair(write up), associate it with player and pc in backend
 #   award tokens for submitting a write-up (with DM approval needed)
