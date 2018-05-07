@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 #generic interfaces and definitions for handling discord interactions
 import credentials
 import discord
@@ -22,7 +20,7 @@ async def on_message(message):
         return
     if message.content.startswith('!hello'):
         msg = 'Hello {0.author.mention}'.format(message)
-        await client.send_message(message.channel, msg)
+        await bot.send_message(message.channel, msg)
 
 # @bot.command()
 # async def add(ctx, a: int, b: int):

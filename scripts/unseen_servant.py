@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 #top level script which instantiates all other parts
 #glues together reddit, discord and database
 import argparse
@@ -18,6 +16,7 @@ if __name__ == '__main__':
     sr.test_bot_authentication()
     sr.check_for_new_posts()
 
+    # starts the discord bot...need to probably run in subprocess?
     import discordbot
 
 

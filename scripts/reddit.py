@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 #generic interfaces and objects for working with the subreddit
 import credentials
 import praw
