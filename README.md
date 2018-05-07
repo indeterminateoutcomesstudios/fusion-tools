@@ -27,6 +27,7 @@ Now all scripts should reference the version of python in that venv, install all
 ## attribution
 - http://arsludi.lamemage.com/index.php/78/grand-experiments-west-marches/
 - https://www.youtube.com/watch?v=oGAC-gBoX9k [Matthew Colville]
+- http://ondras.zarovi.cz/sql/demo/ [XML Database Design Tool]
 
 ## docs
 - http://praw.readthedocs.io/en/latest/index.html
