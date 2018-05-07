@@ -1,12 +1,13 @@
 #player/game tracking database, needs to handle many data
-#players, pcs, discord & reddit accounts
-#tracking posts to players
-#tracking players to games
+#players to discord & reddit accounts
+#players to PCs
+#tracking reddit posts to reddit accounts (and subsequently players + PCs)
+#tracking players to games (thru PCs)
 #tracking games to posts
-#tracking tokens (awarded, player)
-#tracking player map
-#wealth/inventory tracking
-#experience tracking
+#tracking tokens (awarded, player) to players and PCs
+#tracking player map to posts and player contributors
+#wealth/inventory tracking to PCs
+#experience tracking to PCs
 
 import sqlite3
 
@@ -39,16 +40,17 @@ class Backend():
         
     def initialize_db(self):
         ''''''
+        self.execute('''create table post (post_id)''')
         # self.execute('''create table inventory (barcode integer, bgg_id integer)''')
         # self.execute('''create table history (barcode integer, wwid integer, time_out datetime, time_in datetime, auto_in integer)''')
         self.commit()
     
     def destroy_db(self):
-        '''Drop the tables for inventory and history to effectively clear/reset database'''
-        # try:
-        #     self.execute('''drop table inventory''')
-        # except sqlite3.OperationalError:
-        #     pass
+        '''Drop tables to effectively clear/reset database'''
+        try:
+            self.execute('''drop table post''')
+        except sqlite3.OperationalError:
+            pass
         # try:
         #     self.execute('''drop table history''')
         # except sqlite3.OperationalError:
@@ -72,9 +74,9 @@ class Backend():
         ''''''
         return self.format_table('history')
     
-    def get_inventory(self):
+    def get_posts(self):
         ''''''
-        return self.format_table('inventory')
+        return self.format_table('post')
         
     def check_db(self):
         '''Function to sanity check that tables exist in the database'''

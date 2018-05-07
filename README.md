@@ -25,11 +25,12 @@ This is a collection of code, tools, and information to support running a "West 
 Now all scripts should reference the version of python in that venv, install all additional libs from that path
 
 ## attribution
-- 
+- http://arsludi.lamemage.com/index.php/78/grand-experiments-west-marches/
+- https://www.youtube.com/watch?v=oGAC-gBoX9k [Matthew Colville]
 
 ## docs
 - http://praw.readthedocs.io/en/latest/index.html
-- 
+- http://discordpy.readthedocs.io/en/latest/index.html
 
 # Helpful Link Index
 - https://www.dndbeyond.com/ [official online references/tools]
