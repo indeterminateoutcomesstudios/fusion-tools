@@ -13,9 +13,9 @@ This is a collection of code, tools, and information to support running a "West 
 - Before releasing, use pip freeze > requirements.txt
     + remove `pkg-resources` line from requirements.txt
 - To run tests: `python -m unittest discover`
-<!-- - To run tests with coverage: `coverage run -m unittest discover` -->
-<!-- - To generate coverage report: `coverage html --omit="*/venv*"` -->
-<!-- - View report by opening: `./htmlcov/index.html` -->
+- To run tests with coverage: `coverage run -m unittest discover`
+- To generate coverage report: `coverage html --omit="*/venv*"`
+- View report by opening: `./htmlcov/index.html`
 - You'll need to provide credentials for each piece of the flow to work
     + Oauth tokens will be used for most authetication
 - These credentials should be stored in *.cred files in the `credentials` directory

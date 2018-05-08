@@ -10,6 +10,7 @@
 #experience tracking to PCs
 
 import sqlite3
+import pprint
 
 Request = 'R'
 Need_Players = 'N'
@@ -39,6 +40,13 @@ class Backend():
     def fetchall(self):
         return self.cursor.fetchall()
     
+    def get_result(self):
+        rs = self.fetchall()
+        if len(rs) == 1:
+            return rs[0][0]
+        else:
+            return [r[0] for r in rs]
+
     def commit(self):
         self.connection.commit()
     
@@ -55,32 +63,27 @@ class Backend():
     def destroy_db(self):
         '''Drop tables to effectively clear/reset database'''
         for table in self.get_tables():
-            self.execute('''drop table {}'''.format(table))
+            self.execute("""drop table {}""".format(table))
         self.commit()
 
-    def backup_db(self):
-        pass
+    # def backup_db(self):
+    #     pass
 
-    def restore_db(self):
-        pass
+    # def restore_db(self):
+    #     pass
 
-    def dump_db_to_csv(self):
-        '''serialize all tables to human-readable format'''
-        pass
+    # def dump_db_to_csv(self):
+    #     '''serialize all tables to human-readable format'''
+    #     pass
     
     def format_table(self, table_name=''):
         '''return the contents of the specified table as a formatted string'''
-        self.execute('''select * from {}'''.format(table_name))
-        return pp.pformat(self.fetchall())
-        
-    def reset_table(self):
-        '''Reset/clear the contents of the specified table'''
-        pass
+        self.execute("""select * from {}""".format(table_name))
+        return pprint.pformat(self.fetchall())
 
     def get_tables(self):
         self.execute("""select name from sqlite_master where type = 'table'""")
-        ts = self.fetchall()
-        return [t[0] for t in ts]
+        return self.get_result()
         
     def check_db(self):
         '''Function to sanity check that tables exist in the database'''
@@ -90,16 +93,39 @@ class Backend():
         else:
             return False
 
-    def add_player(self, fullname, email='', phone=None):
-        pass
+    def add_player(self, fullname, email='', phone=0):
+        self.execute("""insert into player (fullname, email, phone) values ('{}', '{}', {})""".format(fullname, email, phone))
+        self.commit()
+
+    def get_player_id(self, fullname=None, email=None, phone=None, reddit=None, discord=None):
+        if fullname:
+            self.execute("""select id from player where fullname == '{}'""".format(fullname))
+        elif email:
+            self.execute("""select id from player where email == '{}'""".format(email))
+        elif phone:
+            self.execute("""select id from player where fullname == '{}'""".format(fullname))
+        elif reddit:
+            self.execute("""select id from player inner join reddit where player.id = reddit.player_id and reddit.account == '{}'""".format(reddit))
+        elif discord:
+            self.execute("""select id from player inner join discord where player.id = discord.player_id and discord.account == '{}'""".format(discord))
+        return self.get_result()
 
     def associate_social_with_player(self, player_id, account, act_type):
         if act_type == 'reddit':
-            pass
+            self.execute("""insert into reddit (player_id, account) values ('{}', '{}')""".format(player_id, account))
         elif act_type == 'discord':
-            pass
+            self.execute("""insert into discord (player_id, account) values ('{}', '{}')""".format(player_id, account))
         else:
             print('unrecognized account type: {}'.format(act_type))
+
+    def get_social_of_player(self, player_id, act_type):
+        if act_type == 'discord':
+            self.execute("""select account from discord where player_id == {}""".format(player_id))
+        elif act_type == 'reddit':
+            self.execute("""select account from reddit where player_id == {}""".format(player_id))
+        else:
+            print('unrecognized account type: {}'.format(act_type))
+        return self.get_result()
 
     def add_game(self, status=Request):
         pass

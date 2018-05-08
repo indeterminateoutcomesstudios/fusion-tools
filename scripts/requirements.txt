@@ -3,6 +3,7 @@ async-timeout==3.0.0
 certifi==2018.4.16
 cffi==1.11.5
 chardet==3.0.4
+coverage==4.5.1
 discord.py==0.16.12
 idna==2.6
 multidict==4.3.1
