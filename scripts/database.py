@@ -11,6 +11,14 @@
 
 import sqlite3
 
+Request = 'R'
+Need_Players = 'N'
+Party_Full = 'F'
+Accepted = 'A'
+Successful = 'S'
+Cancelled = 'C'
+Denied = 'D'
+
 class Backend():
     '''Represents the database which contains game history and player status'''
     def __init__(self, name='game.db'):
@@ -81,3 +89,46 @@ class Backend():
             return True
         else:
             return False
+
+    def add_player(self, fullname, email='', phone=None):
+        pass
+
+    def associate_social_with_player(self, player_id, account, act_type):
+        if act_type == 'reddit':
+            pass
+        elif act_type == 'discord':
+            pass
+        else:
+            print('unrecognized account type: {}'.format(act_type))
+
+    def add_game(self, status=Request):
+        pass
+
+    def update_game_status(self, game_id, status):
+        pass
+
+    def add_character_to_player(self, player_id, name):
+        pass
+
+    def award_tokens(self, num_tokens=1, tkn_type='player'):
+        if tkn_type == 'player':
+            pass
+        elif tkn_type == 'author':
+            pass
+        else:
+            print('unrecognized token type: {}'.formt(tkn_type))
+
+    def transfer_tokens(self, giv_id, rec_id, num_tokens):
+        if giv_id == rec_id:
+            return
+
+    def add_wealth(self, character_id, gold=0.0, date=None):
+        pass
+
+    def add_experience(self, character_id, exp=0, date=None):
+        pass
+
+    def add_inventory(self, character_id, name='', date=None):
+        pass
+
+

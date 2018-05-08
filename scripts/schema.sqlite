@@ -20,8 +20,23 @@ CREATE TABLE `discord` (
 
 CREATE TABLE `game` (
   `id` INTEGER NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `status` CHAR NOT NULL DEFAULT 'R',
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (status) REFERENCES `game_status` (`status`)
 );
+
+CREATE TABLE `game_status` (
+  `status` CHAR NOT NULL,
+  `seq` INTEGER,
+  PRIMARY KEY (`status`)
+);
+INSERT INTO game_status(status, seq) VALUES ('R', 1);
+INSERT INTO game_status(status, seq) VALUES ('N', 2);
+INSERT INTO game_status(status, seq) VALUES ('F', 3);
+INSERT INTO game_status(status, seq) VALUES ('A', 4);
+INSERT INTO game_status(status, seq) VALUES ('S', 5);
+INSERT INTO game_status(status, seq) VALUES ('C', 6);
+INSERT INTO game_status(status, seq) VALUES ('D', 7);
 
 CREATE TABLE `character` (
   `id` INTEGER NULL DEFAULT NULL,

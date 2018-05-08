@@ -19,6 +19,8 @@ if __name__ == '__main__':
 
     be.check_db()
 
+    # https://stackoverflow.com/questions/3296040/why-arent-my-sqlite3-foreign-keys-working
+
     # "starts" the reddit bot
     # sr = reddit.fusion_subreddit()
     # sr.test_bot_authentication()

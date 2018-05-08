@@ -77,6 +77,10 @@
 <row name="id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
+<row name="status" null="1" autoincrement="0">
+<datatype>CHAR(1)</datatype>
+<default>''R''</default><relation table="game_status" row="status" />
+</row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
@@ -197,6 +201,17 @@
 </row>
 <key type="PRIMARY" name="">
 <part>id</part>
+</key>
+</table>
+<table x="300" y="1050" name="game_status">
+<row name="status" null="1" autoincrement="0">
+<datatype>CHAR</datatype>
+<default>NULL</default></row>
+<row name="seq" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>status</part>
 </key>
 </table>
 </sql>
