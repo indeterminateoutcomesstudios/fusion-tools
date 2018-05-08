@@ -81,6 +81,15 @@
 <datatype>CHAR(1)</datatype>
 <default>''R''</default><relation table="game_status" row="status" />
 </row>
+<row name="datetime" null="1" autoincrement="0">
+<datatype>DATETIME</datatype>
+<default>NULL</default></row>
+<row name="location" null="1" autoincrement="0">
+<datatype>MEDIUMTEXT</datatype>
+<default>NULL</default></row>
+<row name="vtt" null="1" autoincrement="0">
+<datatype>bit</datatype>
+<default>0</default></row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
@@ -93,6 +102,9 @@
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="player" row="id" />
 </row>
+<row name="name" null="1" autoincrement="0">
+<datatype>MEDIUMTEXT</datatype>
+<default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
@@ -102,9 +114,10 @@
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="player" row="id" />
 </row>
-<row name="date" null="1" autoincrement="0">
-<datatype>DATE</datatype>
-<default>NULL</default></row>
+<row name="game_id" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="game" row="id" />
+</row>
 <row name="player_token" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -117,9 +130,10 @@
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="character" row="id" />
 </row>
-<row name="date" null="1" autoincrement="0">
-<datatype>DATE</datatype>
-<default>NULL</default></row>
+<row name="game_id" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="game" row="id" />
+</row>
 <row name="gold_value" null="1" autoincrement="0">
 <datatype>FLOAT</datatype>
 <default>NULL</default></row>
@@ -129,9 +143,10 @@
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="character" row="id" />
 </row>
-<row name="date_awarded" null="1" autoincrement="0">
-<datatype>DATE</datatype>
-<default>NULL</default></row>
+<row name="game_id" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="game" row="id" />
+</row>
 <row name="amount" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -141,9 +156,10 @@
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="character" row="id" />
 </row>
-<row name="date" null="1" autoincrement="0">
-<datatype>DATE</datatype>
-<default>NULL</default></row>
+<row name="game_id" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="game" row="id" />
+</row>
 <row name="name" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -168,7 +184,7 @@
 <default>NULL</default><relation table="game" row="id" />
 </row>
 </table>
-<table x="100" y="1000" name="game_pcs">
+<table x="100" y="750" name="game_pcs">
 <row name="game_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="game" row="id" />
@@ -203,7 +219,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="300" y="1050" name="game_status">
+<table x="300" y="1100" name="game_status">
 <row name="status" null="1" autoincrement="0">
 <datatype>CHAR</datatype>
 <default>NULL</default></row>

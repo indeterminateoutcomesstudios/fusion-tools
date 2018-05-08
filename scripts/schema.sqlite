@@ -21,6 +21,9 @@ CREATE TABLE `discord` (
 CREATE TABLE `game` (
   `id` INTEGER NULL DEFAULT NULL,
   `status` CHAR NOT NULL DEFAULT 'R',
+  `datetime` TIMESTAMP NULL DEFAULT NULL,
+  `location` MEDIUMTEXT NULL DEFAULT NULL,
+  `vtt` bit NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   FOREIGN KEY (status) REFERENCES `game_status` (`status`)
 );
@@ -41,37 +44,42 @@ INSERT INTO game_status(status, seq) VALUES ('D', 7);
 CREATE TABLE `character` (
   `id` INTEGER NULL DEFAULT NULL,
   `player_id` INTEGER NULL DEFAULT NULL,
+  `name` MEDIUMTEXT NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   FOREIGN KEY (player_id) REFERENCES `player` (`id`)
 );
 
 CREATE TABLE `token` (
   `player_id` INTEGER NULL DEFAULT NULL,
-  `date` DATE NULL DEFAULT NULL,
+  `game_id` INTEGER NULL DEFAULT NULL,
   `player_token` INTEGER NULL DEFAULT NULL,
   `author_token` INTEGER NULL DEFAULT NULL,
-  FOREIGN KEY (player_id) REFERENCES `player` (`id`)
+  FOREIGN KEY (player_id) REFERENCES `player` (`id`),
+  FOREIGN KEY (game_id) REFERENCES `game` (`id`)
 );
 
 CREATE TABLE `wealth` (
   `character_id` INTEGER NULL DEFAULT NULL,
-  `date` DATE NULL DEFAULT NULL,
+  `game_id` INTEGER NULL DEFAULT NULL,
   `gold_value` FLOAT NULL DEFAULT NULL,
-  FOREIGN KEY (character_id) REFERENCES `character` (`id`)
+  FOREIGN KEY (character_id) REFERENCES `character` (`id`),
+  FOREIGN KEY (game_id) REFERENCES `game` (`id`)
 );
 
 CREATE TABLE `experience` (
   `character_id` INTEGER NULL DEFAULT NULL,
-  `date_awarded` DATE NULL DEFAULT NULL,
+  `game_id` INTEGER NULL DEFAULT NULL,
   `amount` INTEGER NULL DEFAULT NULL,
-  FOREIGN KEY (character_id) REFERENCES `character` (`id`)
+  FOREIGN KEY (character_id) REFERENCES `character` (`id`),
+  FOREIGN KEY (game_id) REFERENCES `game` (`id`)
 );
 
 CREATE TABLE `inventory` (
   `character_id` INTEGER NULL DEFAULT NULL,
-  `date` DATE NULL DEFAULT NULL,
+  `game_id` INTEGER NULL DEFAULT NULL,
   `name` INTEGER NULL DEFAULT NULL,
-  FOREIGN KEY (character_id) REFERENCES `character` (`id`)
+  FOREIGN KEY (character_id) REFERENCES `character` (`id`),
+  FOREIGN KEY (game_id) REFERENCES `game` (`id`)
 );
 
 CREATE TABLE `map` (
