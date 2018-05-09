@@ -26,7 +26,7 @@ sr.test_bot_authentication()
 
 # build up discord bot functionality
 cred = credentials.read_credentials('discord')
-bot = commands.Bot(command_prefix=("!","?"))
+bot = commands.Bot(command_prefix=("`","`"))
 
 def start_discord_bot():
     bot.run(cred['discord']['bot_token'])
@@ -56,14 +56,16 @@ async def on_ready():
                 discord_log.info('Joining Default Text Channel')
                 bot.loop.create_task(check_subreddit(channel.id))
 
-# @bot.event
-# async def on_message(message):
-#     # don't reply to itself
-#     if message.author == bot.user:
-#         return
-#     if message.content.startswith('`hello'):
-#         msg = 'Hello {0.author.mention}'.format(message)
-#         await bot.send_message(message.channel, msg)
+@bot.event
+async def on_message(message):
+    # don't reply to itself
+    if message.author == bot.user:
+        return
+    if message.content.startswith('`hello'):
+        msg = 'Hello {0.author.mention}'.format(message)
+        await bot.send_message(message.channel, msg)
+
+    await bot.process_commands(message)
 
 # @bot.command()
 # async def multiply(ctx, a: int, b: int):
@@ -73,7 +75,7 @@ async def on_ready():
 # async def greet(ctx):
 #     await ctx.send(":smiley: :wave: Hello, there!")
 
-@bot.command(pass_context=True)
+@bot.command()
 async def status(ctx):
     embed = discord.Embed(title="System Status", description="dungeon_bot services")
     if sr.check_for_new_posts():
@@ -87,11 +89,11 @@ async def status(ctx):
     # check for DM online?
     await ctx.send()
 
-@bot.command(pass_context=True)
+@bot.command()
 async def dbcheck(ctx):
     await ctx.send(str(db.get_tables()))
 
-@bot.command(pass_context=True)
+@bot.command()
 async def info(ctx):
     embed = discord.Embed(title="dungeon_bot", description="A D&D DM helper bot, id est a minion.", color=0xeee657)
     # give info about you here
