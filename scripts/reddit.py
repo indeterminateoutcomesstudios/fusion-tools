@@ -47,4 +47,5 @@ class fusion_subreddit():
             reddit_log.info("Flair: {}".format(post.link_flair_text))
             reddit_log.info("Score: {}".format(post.score))
             reddit_log.info('-'*30)
+        return True
 
