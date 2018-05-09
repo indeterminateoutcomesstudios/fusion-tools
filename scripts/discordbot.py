@@ -2,16 +2,56 @@
 import credentials
 import discord
 from discord.ext import commands
+import asyncio
+import logging
+discord_log = logging.getLogger('discord')
+import pprint
+from database import Backend, db_log
+from reddit import fusion_subreddit, reddit_log
+
+# create database connection
+db_log.info('Starting connection')
+db = Backend()
+if db.check_db():
+    db_log.info('Tables are present, assuming they are correct')
+else:
+    db_log.info('The database is empty, reinitializing')
+    db.destroy_db()
+    db.initialize_db()
+
+# create reddit connection
+reddit_log.info('Starting connection')
+sr = fusion_subreddit()
+sr.test_bot_authentication()
 
 cred = credentials.read_credentials('discord')
 bot = commands.Bot(command_prefix='$')
 
+def start_discord_bot():
+    bot.run(cred['discord']['bot_token'])
+
+async def check_subreddit(channel_id):
+    await bot.wait_until_ready()
+    channel = discord.Object(id=channel_id)
+    while not bot.is_closed:
+        # await bot.send_message(channel, "I'm alive!")
+        discord_log.info('Checking subreddit for new posts.')
+        sr.check_for_new_posts()
+        await asyncio.sleep(30)
+
 @bot.event
 async def on_ready():
-    print('Logged in as')
-    print(bot.user.name)
-    print(bot.user.id)
-    print('------')
+    discord_log.info('Logged in as')
+    discord_log.info(bot.user.name)
+    discord_log.info(bot.user.id)
+    discord_log.info('------')
+    for server in bot.servers:
+        # discord_log.info("Server: {}".format(server.name))
+        for channel in server.channels:
+            # discord_log.info("  {} {} {}".format(channel.name, channel.type, channel.id))
+            if str(channel.type) == 'text' and channel.name == 'fusion-project':
+                discord_log.info('Joining Default Text Channel')
+                bot.loop.create_task(check_subreddit(channel.id))
 
 @bot.event
 async def on_message(message):
@@ -68,4 +108,4 @@ async def on_message(message):
 
 #     await ctx.send(embed=embed)
 
-bot.run(cred['discord']['bot_token'])
+

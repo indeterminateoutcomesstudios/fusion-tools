@@ -1,7 +1,8 @@
 #generic interfaces and objects for working with the subreddit
 import credentials
 import praw
-
+import logging
+reddit_log = logging.getLogger(__name__)
 # will probably need to use something to continually monitor the stream of comments/posts
 # http://praw.readthedocs.io/en/latest/tutorials/reply_bot.html
 
@@ -33,17 +34,17 @@ class fusion_subreddit():
     def test_bot_authentication(self):
         me = self.connection.user.me()
         if me == self.cred['reddit']['username']:
-            print('Authentication with reddit as {} successful.'.format(me))
+            reddit_log.info('Authentication with reddit as {} successful.'.format(me))
         else:
-            print('Authentication with reddit as {} failed.'.format(self.cred['reddit']['username']))
+            reddit_log.info('Authentication with reddit as {} failed.'.format(self.cred['reddit']['username']))
 
     def check_for_new_posts(self):
-        print('-'*30)
+        reddit_log.info('-'*30)
         for post in self.subreddit.new():
-            print("ID: {}".format(post))
-            print("Title: {}".format(post.title))
-            print("Text: {}".format(post.selftext))
-            print("Flair: {}".format(post.link_flair_text))
-            print("Score: {}".format(post.score))
-            print('-'*30)
+            reddit_log.info("ID: {}".format(post))
+            reddit_log.info("Title: {}".format(post.title))
+            reddit_log.info("Text: {}".format(post.selftext))
+            reddit_log.info("Flair: {}".format(post.link_flair_text))
+            reddit_log.info("Score: {}".format(post.score))
+            reddit_log.info('-'*30)
 

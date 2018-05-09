@@ -9,9 +9,13 @@
 #wealth/inventory tracking to PCs
 #experience tracking to PCs
 
+# https://stackoverflow.com/questions/3296040/why-arent-my-sqlite3-foreign-keys-working
+
 import sqlite3
 from datetime import datetime, date, time
 import pprint
+import logging
+db_log = logging.getLogger(__name__)
 
 Request = 'R'
 Need_Players = 'N'
@@ -23,11 +27,10 @@ Denied = 'D'
 
 class Backend():
     '''Represents the database which contains game history and player status'''
-    def __init__(self, name='game.db', debug=False):
+    def __init__(self, name='game.db'):
         '''Create connection to sqlite database file on disk and initialize cursor to perform actions'''
         self.connection = sqlite3.connect(name, detect_types=sqlite3.PARSE_DECLTYPES, check_same_thread=False)
         self.cursor = self.connection.cursor()
-        self.debug = debug
         
     def execute(self, command='', values=()):
         self.cursor.execute(command, values)
@@ -120,8 +123,7 @@ class Backend():
         elif act_type == 'discord':
             self.execute("insert into discord (player_id, account) values (?, ?)", (player_id, account))
         else:
-            if self.debug:
-                print('\nunrecognized account type: {}'.format(act_type))
+            db_log.warning('\nunrecognized account type: {}'.format(act_type))
 
     def get_social_of_player(self, player_id, act_type):
         if act_type == 'discord':
@@ -129,8 +131,7 @@ class Backend():
         elif act_type == 'reddit':
             self.execute("select account from reddit where player_id == {}".format(player_id))
         else:
-            if self.debug:
-                print('\nunrecognized account type: {}'.format(act_type))
+            db_log.warning('\nunrecognized account type: {}'.format(act_type))
         return self.get_1_col_result()
 
     def add_game(self, date=None, time=None, location='', vtt=False, status=Request):
@@ -217,8 +218,7 @@ class Backend():
         elif tkn_type == 'author':
             pass
         else:
-            if self.debug:
-                print('\nunrecognized token type: {}'.formt(tkn_type))
+            db_log.warning('\nunrecognized token type: {}'.formt(tkn_type))
 
     def transfer_tokens(self, giv_id, rec_id, num_tokens):
         if giv_id == rec_id:

@@ -5,7 +5,7 @@ from database import *
 class BackendTest(unittest.TestCase): 
   
   def setUp(self):
-    self.db = Backend('test.db', debug=True)
+    self.db = Backend('test.db')
     self.db.destroy_db()
     self.db.initialize_db()
     
