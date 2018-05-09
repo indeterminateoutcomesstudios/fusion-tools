@@ -73,7 +73,7 @@ async def on_ready():
 # async def greet(ctx):
 #     await ctx.send(":smiley: :wave: Hello, there!")
 
-@bot.command()
+@bot.command(pass_context=True)
 async def status(ctx):
     embed = discord.Embed(title="System Status", description="dungeon_bot services")
     if sr.check_for_new_posts():
@@ -87,11 +87,11 @@ async def status(ctx):
     # check for DM online?
     await ctx.send()
 
-@bot.command()
+@bot.command(pass_context=True)
 async def dbcheck(ctx):
     await ctx.send(str(db.get_tables()))
 
-@bot.command()
+@bot.command(pass_context=True)
 async def info(ctx):
     embed = discord.Embed(title="dungeon_bot", description="A D&D DM helper bot, id est a minion.", color=0xeee657)
     # give info about you here
