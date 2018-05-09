@@ -26,7 +26,7 @@ sr.test_bot_authentication()
 
 # build up discord bot functionality
 cred = credentials.read_credentials('discord')
-bot = commands.Bot(command_prefix='`')
+bot = commands.Bot(command_prefix=("!","?"))
 
 def start_discord_bot():
     bot.run(cred['discord']['bot_token'])
@@ -56,14 +56,14 @@ async def on_ready():
                 discord_log.info('Joining Default Text Channel')
                 bot.loop.create_task(check_subreddit(channel.id))
 
-@bot.event
-async def on_message(message):
-    # don't reply to itself
-    if message.author == bot.user:
-        return
-    if message.content.startswith('`hello'):
-        msg = 'Hello {0.author.mention}'.format(message)
-        await bot.send_message(message.channel, msg)
+# @bot.event
+# async def on_message(message):
+#     # don't reply to itself
+#     if message.author == bot.user:
+#         return
+#     if message.content.startswith('`hello'):
+#         msg = 'Hello {0.author.mention}'.format(message)
+#         await bot.send_message(message.channel, msg)
 
 # @bot.command()
 # async def multiply(ctx, a: int, b: int):
@@ -103,19 +103,19 @@ async def info(ctx):
     await ctx.send(embed=embed)
 
 # bot.remove_command('help')
-@bot.command()
-async def help(ctx):
-    embed = discord.Embed(title="dungeon_bot", description="A D&D DM helper bot, id est a minion. List of commands are:", color=0xeee657)
+# @bot.command()
+# async def help(ctx):
+#     embed = discord.Embed(title="dungeon_bot", description="A D&D DM helper bot, id est a minion. List of commands are:", color=0xeee657)
 
-    # embed.add_field(name="`multiply X Y", value="Gives the multiplication of **X** and **Y**", inline=False)
-    # embed.add_field(name="`greet", value="Gives a nice greet message", inline=False)
-    embed.add_field(name="`dbcheck", value="Gives result of database check.", inline=False)
-    embed.add_field(name="`status", value="Gives current status of services.", inline=False)
+#     # embed.add_field(name="`multiply X Y", value="Gives the multiplication of **X** and **Y**", inline=False)
+#     # embed.add_field(name="`greet", value="Gives a nice greet message", inline=False)
+#     embed.add_field(name="`dbcheck", value="Gives result of database check.", inline=False)
+#     embed.add_field(name="`status", value="Gives current status of services.", inline=False)
 
 
-    embed.add_field(name="`info", value="Gives a little info about the bot", inline=False)
-    embed.add_field(name="`help", value="Gives this message", inline=False)
+#     embed.add_field(name="`info", value="Gives a little info about the bot", inline=False)
+#     embed.add_field(name="`help", value="Gives this message", inline=False)
 
-    await ctx.send(embed=embed)
+#     await ctx.send(embed=embed)
 
 
