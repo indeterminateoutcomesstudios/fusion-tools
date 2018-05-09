@@ -77,13 +77,13 @@ async def on_ready():
 async def status(ctx):
     embed = discord.Embed(title="System Status", description="dungeon_bot services")
     if sr.check_for_new_posts():
-        embed.add_field(name="Subreddit", value="Good", color=0x57ee72)
+        embed.add_field(name="Subreddit", value="Good")#, color=0x57ee72)
     else:
-        embed.add_field(name="Subreddit", value="Bad", color=0xee5768)
+        embed.add_field(name="Subreddit", value="Bad")#, color=0xee5768)
     if db.check_db():
-        embed.add_field(name="Database", value="Good", color=0x57ee72)
+        embed.add_field(name="Database", value="Good")#, color=0x57ee72)
     else:
-        embed.add_field(name="Database", value="Bad", color=0xee5768)
+        embed.add_field(name="Database", value="Bad")#, color=0xee5768)
     # check for DM online?
     await ctx.send()
 
@@ -102,20 +102,20 @@ async def info(ctx):
     # embed.add_field(name="Invite", value="[Invite link](<insert your OAuth invitation link here>)")
     await ctx.send(embed=embed)
 
-# bot.remove_command('help')
-# @bot.command()
-# async def help(ctx):
-#     embed = discord.Embed(title="dungeon_bot", description="A D&D DM helper bot, id est a minion. List of commands are:", color=0xeee657)
+bot.remove_command('help')
+@bot.command()
+async def help(ctx):
+    embed = discord.Embed(title="dungeon_bot", description="A D&D DM helper bot, id est a minion. List of commands are:", color=0xeee657)
 
-#     # embed.add_field(name="`multiply X Y", value="Gives the multiplication of **X** and **Y**", inline=False)
-#     # embed.add_field(name="`greet", value="Gives a nice greet message", inline=False)
-#     embed.add_field(name="`dbcheck", value="Gives result of database check.", inline=False)
-#     embed.add_field(name="`status", value="Gives current status of services.", inline=False)
+    # embed.add_field(name="`multiply X Y", value="Gives the multiplication of **X** and **Y**", inline=False)
+    # embed.add_field(name="`greet", value="Gives a nice greet message", inline=False)
+    embed.add_field(name="`dbcheck", value="Gives result of database check.", inline=False)
+    embed.add_field(name="`status", value="Gives current status of services.", inline=False)
 
 
-#     embed.add_field(name="`info", value="Gives a little info about the bot", inline=False)
-#     embed.add_field(name="`help", value="Gives this message", inline=False)
+    embed.add_field(name="`info", value="Gives a little info about the bot", inline=False)
+    embed.add_field(name="`help", value="Gives this message", inline=False)
 
-#     await ctx.send(embed=embed)
+    await ctx.send(embed=embed)
 
 
