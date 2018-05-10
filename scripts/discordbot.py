@@ -9,6 +9,7 @@ import pprint
 from database import Backend, db_log
 from reddit import fusion_subreddit, reddit_log
 
+
 # create database connection
 db_log.info('Starting connection')
 db = Backend()
@@ -24,21 +25,26 @@ reddit_log.info('Starting connection')
 sr = fusion_subreddit()
 sr.test_bot_authentication()
 
-# build up discord bot functionality
+# create discord bot and pass it credentials as well as other connections
 cred = credentials.read_credentials('discord')
-bot = commands.Bot(command_prefix=("`","`"))
+bot = commands.Bot(command_prefix=("`"))
+bot.subreddit = sr
+bot.backend = db
+
 
 def start_discord_bot():
+    # bot.loop.create_task(check_subreddit())
     bot.run(cred['discord']['bot_token'])
 
-# LINK TO SUBREDDIT
+
+
 async def check_subreddit(channel_id):
     await bot.wait_until_ready()
-    channel = discord.Object(id=channel_id)
-    while not bot.is_closed:
-        # await bot.send_message(channel, "I'm alive!")
+    channel = bot.get_channel(channel_id)
+    while not bot.is_closed():
+        await channel.send('Hold on while I check reddit...')
         discord_log.info('Checking subreddit for new posts.')
-        sr.check_for_new_posts()
+        bot.subreddit.check_for_new_posts()
         await asyncio.sleep(30)
 
 @bot.event
@@ -46,13 +52,14 @@ async def on_ready():
     discord_log.info('Logged in as')
     discord_log.info(bot.user.name)
     discord_log.info(bot.user.id)
+    discord_log.info('Using discord.py version: {}'.format(discord.__version__))
     discord_log.info('------')
     # LINK TO SUBREDDIT
-    for server in bot.servers:
+    for guild in bot.guilds:
         # discord_log.info("Server: {}".format(server.name))
-        for channel in server.channels:
+        for channel in guild.channels:
             # discord_log.info("  {} {} {}".format(channel.name, channel.type, channel.id))
-            if str(channel.type) == 'text' and channel.name == 'fusion-project':
+            if isinstance(channel, discord.TextChannel) and channel.name == 'fusion-project':
                 discord_log.info('Joining Default Text Channel')
                 bot.loop.create_task(check_subreddit(channel.id))
 
@@ -61,10 +68,10 @@ async def on_message(message):
     # don't reply to itself
     if message.author == bot.user:
         return
-    if message.content.startswith('`hello'):
+    if message.content[1:].startswith('hello'):
         msg = 'Hello {0.author.mention}'.format(message)
-        await bot.send_message(message.channel, msg)
-
+        await message.channel.send(msg)
+    # move on to process any commands
     await bot.process_commands(message)
 
 # @bot.command()
@@ -78,20 +85,20 @@ async def on_message(message):
 @bot.command()
 async def status(ctx):
     embed = discord.Embed(title="System Status", description="dungeon_bot services")
-    if sr.check_for_new_posts():
+    if bot.subreddit.check_for_new_posts():
         embed.add_field(name="Subreddit", value="Good")#, color=0x57ee72)
     else:
         embed.add_field(name="Subreddit", value="Bad")#, color=0xee5768)
-    if db.check_db():
+    if bot.backend.check_db():
         embed.add_field(name="Database", value="Good")#, color=0x57ee72)
     else:
         embed.add_field(name="Database", value="Bad")#, color=0xee5768)
     # check for DM online?
-    await ctx.send()
+    await ctx.send(embed=embed)
 
 @bot.command()
 async def dbcheck(ctx):
-    await ctx.send(str(db.get_tables()))
+    await ctx.send(str(bot.backend.get_tables()))
 
 @bot.command()
 async def info(ctx):
