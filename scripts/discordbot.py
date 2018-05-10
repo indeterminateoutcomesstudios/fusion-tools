@@ -5,10 +5,13 @@ from discord.ext import commands
 import asyncio
 import logging
 discord_log = logging.getLogger('discord')
+
 import pprint
 from database import Backend, db_log
 from reddit import fusion_subreddit, reddit_log
 
+# conversational interface?
+# https://github.com/gunthercox/ChatterBot
 
 # create database connection
 db_log.info('Starting connection')
@@ -31,6 +34,8 @@ bot = commands.Bot(command_prefix=("`"))
 bot.subreddit = sr
 bot.backend = db
 
+# load additional bot commands from external files
+from concierge import *
 
 def start_discord_bot():
     # bot.loop.create_task(check_subreddit())
@@ -93,6 +98,12 @@ async def status(ctx):
         embed.add_field(name="Database", value="Good")#, color=0x57ee72)
     else:
         embed.add_field(name="Database", value="Bad")#, color=0xee5768)
+    # embed.add_field(name="DMs", value=)
+    # embed.add_field(name="Players", value=)
+    # embed.add_field(name="PCs", value=)
+    # embed.add_field(name="Games", value=)
+    # total experience awarded
+    # total PC wealth
     # check for DM online?
     await ctx.send(embed=embed)
 
@@ -102,7 +113,7 @@ async def dbcheck(ctx):
 
 @bot.command()
 async def info(ctx):
-    embed = discord.Embed(title="dungeon_bot", description="A D&D DM helper bot, id est a minion.", color=0xeee657)
+    embed = discord.Embed(title="dungeon_bot", description="A D&D DM minion...bot.", color=0xeee657)
     # give info about you here
     embed.add_field(name="Author", value="chisaipete")    
     # Shows the number of servers the bot is member of.
@@ -111,20 +122,20 @@ async def info(ctx):
     # embed.add_field(name="Invite", value="[Invite link](<insert your OAuth invitation link here>)")
     await ctx.send(embed=embed)
 
-bot.remove_command('help')
-@bot.command()
-async def help(ctx):
-    embed = discord.Embed(title="dungeon_bot", description="A D&D DM helper bot, id est a minion. List of commands are:", color=0xeee657)
+# bot.remove_command('help')
+# @bot.command()
+# async def help(ctx):
+#     embed = discord.Embed(title="dungeon_bot", description="A D&D DM helper bot, id est a minion. List of commands are:", color=0xeee657)
 
-    # embed.add_field(name="`multiply X Y", value="Gives the multiplication of **X** and **Y**", inline=False)
-    # embed.add_field(name="`greet", value="Gives a nice greet message", inline=False)
-    embed.add_field(name="`dbcheck", value="Gives result of database check.", inline=False)
-    embed.add_field(name="`status", value="Gives current status of services.", inline=False)
+#     # embed.add_field(name="`multiply X Y", value="Gives the multiplication of **X** and **Y**", inline=False)
+#     # embed.add_field(name="`greet", value="Gives a nice greet message", inline=False)
+#     embed.add_field(name="`dbcheck", value="Gives result of database check.", inline=False)
+#     embed.add_field(name="`status", value="Gives current status of services.", inline=False)
 
 
-    embed.add_field(name="`info", value="Gives a little info about the bot", inline=False)
-    embed.add_field(name="`help", value="Gives this message", inline=False)
+#     embed.add_field(name="`info", value="Gives a little info about the bot", inline=False)
+#     embed.add_field(name="`help", value="Gives this message", inline=False)
 
-    await ctx.send(embed=embed)
+#     await ctx.send(embed=embed)
 
 
