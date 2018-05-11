@@ -10,35 +10,35 @@ import pprint
 from database import Backend, db_log
 from reddit import fusion_subreddit, reddit_log
 
-# conversational interface?
-# https://github.com/gunthercox/ChatterBot
-
-# create database connection
-db_log.info('Starting connection')
-db = Backend()
-if db.check_db():
-    db_log.info('Tables are present, assuming they are correct')
-else:
-    db_log.info('The database is empty, reinitializing')
-    db.destroy_db()
-    db.initialize_db()
-
-# create reddit connection
-reddit_log.info('Starting connection')
-sr = fusion_subreddit()
-sr.test_bot_authentication()
-
-# create discord bot and pass it credentials as well as other connections
-cred = credentials.read_credentials('discord')
 bot = commands.Bot(command_prefix=("`"))
-bot.subreddit = sr
-bot.backend = db
-
 # load additional bot commands from external files
 from concierge import *
 
-def start_discord_bot():
+# conversational interface?
+# https://github.com/gunthercox/ChatterBot
+
+
+def start_discord_bot(clear_database, no_reddit):
+    # create database connection
+    db_log.info('Starting connection')
+    db = Backend()
+    if clear_database:
+        db_log.info('Clearing database')
+        db.destroy_db()
+        db.initialize_db()
+
+    # create reddit connection
+    reddit_log.info('Starting connection')
+    sr = fusion_subreddit()
+    sr.test_bot_authentication()
+
+    # create discord bot and pass it credentials as well as other connections
+    cred = credentials.read_credentials('discord')
+    bot.subreddit = sr
+    bot.backend = db
+
     # bot.loop.create_task(check_subreddit())
+    bot.no_reddit = no_reddit
     bot.run(cred['discord']['bot_token'])
 
 
@@ -54,19 +54,17 @@ async def check_subreddit(channel_id):
 
 @bot.event
 async def on_ready():
-    discord_log.info('Logged in as')
-    discord_log.info(bot.user.name)
-    discord_log.info(bot.user.id)
+    discord_log.info('Logged in as {} #{}'.format(bot.user.name, bot.user.id))
     discord_log.info('Using discord.py version: {}'.format(discord.__version__))
-    discord_log.info('------')
     # LINK TO SUBREDDIT
-    for guild in bot.guilds:
-        # discord_log.info("Server: {}".format(server.name))
-        for channel in guild.channels:
-            # discord_log.info("  {} {} {}".format(channel.name, channel.type, channel.id))
-            if isinstance(channel, discord.TextChannel) and channel.name == 'fusion-project':
-                discord_log.info('Joining Default Text Channel')
-                bot.loop.create_task(check_subreddit(channel.id))
+    if not bot.no_reddit:
+        for guild in bot.guilds:
+            # discord_log.info("Server: {}".format(server.name))
+            for channel in guild.channels:
+                # discord_log.info("  {} {} {}".format(channel.name, channel.type, channel.id))
+                if isinstance(channel, discord.TextChannel) and channel.name == 'fusion-project':
+                    discord_log.info('Joining Default Text Channel')
+                    bot.loop.create_task(check_subreddit(channel.id))
 
 @bot.event
 async def on_message(message):
@@ -99,7 +97,7 @@ async def status(ctx):
     else:
         embed.add_field(name="Database", value="Bad")#, color=0xee5768)
     # embed.add_field(name="DMs", value=)
-    # embed.add_field(name="Players", value=)
+    embed.add_field(name="Players", value=str(bot.backend.num_players()))
     # embed.add_field(name="PCs", value=)
     # embed.add_field(name="Games", value=)
     # total experience awarded

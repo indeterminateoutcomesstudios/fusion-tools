@@ -18,6 +18,10 @@ CREATE TABLE `discord` (
   `account` MEDIUMTEXT NULL DEFAULT NULL
 );
 
+CREATE TABLE `administrator` (
+  `player_id` INTEGER NULL DEFAULT NULL,
+);
+
 CREATE TABLE `game` (
   `id` INTEGER NULL DEFAULT NULL,
   `status` CHAR NOT NULL DEFAULT 'R',

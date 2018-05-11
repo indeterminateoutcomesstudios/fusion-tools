@@ -43,6 +43,7 @@
 <default>NULL</default><relation table="reddit" row="player_id" />
 <relation table="discord" row="player_id" />
 <relation table="reddit" row="player_id" />
+<relation table="administrator" row="player_id" />
 </row>
 <row name="fullname" null="1" autoincrement="0">
 <datatype>MEDIUMTEXT</datatype>
@@ -228,6 +229,14 @@
 <default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>status</part>
+</key>
+</table>
+<table x="650" y="620" name="administrator">
+<row name="player_id" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>player_id</part>
 </key>
 </table>
 </sql>

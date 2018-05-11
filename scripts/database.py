@@ -104,6 +104,23 @@ class Backend():
         self.execute("insert into player (fullname, email, phone) values (?, ?, ?)", (fullname, email, phone))
         self.commit()
 
+    def check_admin(self, player_id):
+        self.execute("select player_id from administrator where player_id == ?", (player_id,))
+        admin = self.fetchall()
+        db_log.info(admin)
+        if admin:
+            return True
+        else:
+            return False
+
+    def make_admin(self, player_id):
+        self.execute("insert into administrator (player_id) values (?)", (player_id,))
+        self.commit()
+
+    def remove_admin(self, player_id):
+        self.execute("delete from administrator from where player_id == ?", (player_id,))
+        self.commit()
+
     def get_player_id(self, fullname=None, email=None, phone=None, reddit=None, discord=None):
         if fullname:
             self.execute("select id from player where fullname == ?", (fullname,))
@@ -194,6 +211,13 @@ class Backend():
     def get_dms(self, game_id):
         self.execute("select id from player inner join game_dms where player.id = game_dms.dm_id and game_dms.game_id == ?", (game_id,))
         return self.get_1_col_result()
+
+    def get_players(self):
+        self.execute("select fullname from player")
+        return self.fetchall()
+
+    def num_players(self):
+        return len(self.get_players())
 
     def get_players_of_game(self, game_id):
         self.execute("select player_id from character inner join game_pcs where character.id = game_pcs.character_id and game_pcs.game_id == ?", (game_id,))

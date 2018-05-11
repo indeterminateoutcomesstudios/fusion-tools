@@ -36,7 +36,11 @@ import discordbot # the discord bot actually is the master of the reddit bot, fo
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='D&D DM Minion: Unseen Servant')
+    parser.add_argument('-r', '--no_reddit', help="turn off reddit post check", action='store_true',default=False)
+    parser.add_argument('-x', '--clear_db', help="purge the database", action='store_true',default=False)
+    args = parser.parse_args()
     # add argparse to change what is turned on and off for the discord/reddit bot
-    discordbot.start_discord_bot()
+    discordbot.start_discord_bot(clear_database=args.clear_db, no_reddit=args.no_reddit)
 
 
