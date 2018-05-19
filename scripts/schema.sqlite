@@ -1,123 +1,85 @@
-CREATE TABLE `player` (
-  `id` INTEGER NULL DEFAULT NULL,
-  `fullname` MEDIUMTEXT NULL DEFAULT NULL,
-  `email` MEDIUMTEXT NULL DEFAULT NULL,
-  `phone` INTEGER NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (id) REFERENCES `reddit` (`player_id`),
-  FOREIGN KEY (id) REFERENCES `discord` (`player_id`)
+CREATE TABLE 'player' (
+'player_id' INTEGER NOT NULL  PRIMARY KEY AUTOINCREMENT,
+'fullname' TEXT NOT NULL ,
+'email' TEXT DEFAULT NULL,
+'phone' INTEGER DEFAULT NULL
 );
 
-CREATE TABLE `reddit` (
-  `player_id` INTEGER NULL DEFAULT NULL,
-  `account` MEDIUMTEXT NULL DEFAULT NULL
+CREATE TABLE 'token' (
+'player_id' INTEGER NOT NULL  REFERENCES 'player' ('player_id'),
+'game_id' INTEGER NOT NULL  REFERENCES 'game' ('game_id'),
+'player_token' INTEGER NOT NULL  DEFAULT 0,
+'author_token' INTEGER NOT NULL  DEFAULT 0
 );
 
-CREATE TABLE `discord` (
-  `player_id` INTEGER NULL DEFAULT NULL,
-  `account` MEDIUMTEXT NULL DEFAULT NULL
+CREATE TABLE 'inventory' (
+'character_id' INTEGER NOT NULL  REFERENCES 'character' ('character_id'),
+'game_id' INTEGER NOT NULL  REFERENCES 'game' ('game_id'),
+'name' TEXT DEFAULT NULL
 );
 
-CREATE TABLE `administrator` (
-  `player_id` INTEGER NULL DEFAULT NULL,
+CREATE TABLE 'wealth' (
+'character_id' INTEGER NOT NULL  REFERENCES 'character' ('character_id'),
+'game_id' INTEGER NOT NULL  REFERENCES 'game' ('game_id'),
+'gold_value' REAL NOT NULL  DEFAULT 0
 );
 
-CREATE TABLE `game` (
-  `id` INTEGER NULL DEFAULT NULL,
-  `status` CHAR NOT NULL DEFAULT 'R',
-  `datetime` TIMESTAMP NULL DEFAULT NULL,
-  `location` MEDIUMTEXT NULL DEFAULT NULL,
-  `vtt` bit NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (status) REFERENCES `game_status` (`status`)
+CREATE TABLE 'character' (
+'character_id' INTEGER NOT NULL  PRIMARY KEY AUTOINCREMENT,
+'player_id' INTEGER NOT NULL  REFERENCES 'player' ('player_id'),
+'name' TEXT DEFAULT NULL
 );
 
-CREATE TABLE `game_status` (
-  `status` CHAR NOT NULL,
-  `seq` INTEGER,
-  PRIMARY KEY (`status`)
-);
-INSERT INTO game_status(status, seq) VALUES ('R', 1);
-INSERT INTO game_status(status, seq) VALUES ('N', 2);
-INSERT INTO game_status(status, seq) VALUES ('F', 3);
-INSERT INTO game_status(status, seq) VALUES ('A', 4);
-INSERT INTO game_status(status, seq) VALUES ('S', 5);
-INSERT INTO game_status(status, seq) VALUES ('C', 6);
-INSERT INTO game_status(status, seq) VALUES ('D', 7);
-
-CREATE TABLE `character` (
-  `id` INTEGER NULL DEFAULT NULL,
-  `player_id` INTEGER NULL DEFAULT NULL,
-  `name` MEDIUMTEXT NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (player_id) REFERENCES `player` (`id`)
+CREATE TABLE 'experience' (
+'character_id' INTEGER NOT NULL  REFERENCES 'character' ('character_id'),
+'game_id' INTEGER NOT NULL  REFERENCES 'game' ('game_id'),
+'amount' INTEGER NOT NULL  DEFAULT 0
 );
 
-CREATE TABLE `token` (
-  `player_id` INTEGER NULL DEFAULT NULL,
-  `game_id` INTEGER NULL DEFAULT NULL,
-  `player_token` INTEGER NULL DEFAULT NULL,
-  `author_token` INTEGER NULL DEFAULT NULL,
-  FOREIGN KEY (player_id) REFERENCES `player` (`id`),
-  FOREIGN KEY (game_id) REFERENCES `game` (`id`)
+CREATE TABLE 'game' (
+'game_id' INTEGER NOT NULL  PRIMARY KEY AUTOINCREMENT,
+'status' TEXT(1) NOT NULL  DEFAULT 'R',
+'datetime' TEXT DEFAULT NULL,
+'location' TEXT DEFAULT NULL,
+'vtt' INTEGER(1) DEFAULT NULL
 );
 
-CREATE TABLE `wealth` (
-  `character_id` INTEGER NULL DEFAULT NULL,
-  `game_id` INTEGER NULL DEFAULT NULL,
-  `gold_value` FLOAT NULL DEFAULT NULL,
-  FOREIGN KEY (character_id) REFERENCES `character` (`id`),
-  FOREIGN KEY (game_id) REFERENCES `game` (`id`)
+CREATE TABLE 'post' (
+'post_id' INTEGER NOT NULL  PRIMARY KEY AUTOINCREMENT,
+'game_id' INTEGER NOT NULL  REFERENCES 'game' ('game_id'),
+'reddit_hash' TEXT DEFAULT NULL
 );
 
-CREATE TABLE `experience` (
-  `character_id` INTEGER NULL DEFAULT NULL,
-  `game_id` INTEGER NULL DEFAULT NULL,
-  `amount` INTEGER NULL DEFAULT NULL,
-  FOREIGN KEY (character_id) REFERENCES `character` (`id`),
-  FOREIGN KEY (game_id) REFERENCES `game` (`id`)
+CREATE TABLE 'write_up' (
+'post_id' INTEGER NOT NULL  REFERENCES 'post' ('post_id'),
+'game_id' INTEGER NOT NULL  REFERENCES 'game' ('game_id')
 );
 
-CREATE TABLE `inventory` (
-  `character_id` INTEGER NULL DEFAULT NULL,
-  `game_id` INTEGER NULL DEFAULT NULL,
-  `name` INTEGER NULL DEFAULT NULL,
-  FOREIGN KEY (character_id) REFERENCES `character` (`id`),
-  FOREIGN KEY (game_id) REFERENCES `game` (`id`)
+CREATE TABLE 'map' (
+'post_id' INTEGER NOT NULL  REFERENCES 'post' ('post_id'),
+'game_id' INTEGER NOT NULL  REFERENCES 'game' ('game_id')
 );
 
-CREATE TABLE `map` (
-  `id` INTEGER NULL DEFAULT NULL,
-  `game_id` INTEGER NULL DEFAULT NULL,
-  FOREIGN KEY (id) REFERENCES `post` (`id`),
-  FOREIGN KEY (game_id) REFERENCES `game` (`id`)
+CREATE TABLE 'game_dms' (
+'game_id' INTEGER NOT NULL  REFERENCES 'game' ('game_id'),
+'player_id' INTEGER NOT NULL  REFERENCES 'player' ('player_id')
 );
 
-CREATE TABLE `write_up` (
-  `post_id` INTEGER NULL DEFAULT NULL,
-  `game_id` INTEGER NULL DEFAULT NULL,
-  FOREIGN KEY (post_id) REFERENCES `post` (`id`),
-  FOREIGN KEY (game_id) REFERENCES `game` (`id`)
+CREATE TABLE 'game_pcs' (
+'game_id' INTEGER NOT NULL  REFERENCES 'game' ('game_id'),
+'character_id' INTEGER NOT NULL  REFERENCES 'character' ('character_id')
 );
 
-CREATE TABLE `game_pcs` (
-  `game_id` INTEGER NULL DEFAULT NULL,
-  `character_id` INTEGER NULL DEFAULT NULL,
-  FOREIGN KEY (game_id) REFERENCES `game` (`id`),
-  FOREIGN KEY (character_id) REFERENCES `character` (`id`)
+CREATE TABLE 'administrator' (
+'player_id' INTEGER NOT NULL  REFERENCES 'player' ('player_id')
 );
 
-CREATE TABLE `game_dms` (
-  `game_id` INTEGER NULL DEFAULT NULL,
-  `dm_id` INTEGER NULL DEFAULT NULL,
-  FOREIGN KEY (game_id) REFERENCES `game` (`id`),
-  FOREIGN KEY (dm_id) REFERENCES `player` (`id`)
+CREATE TABLE 'reddit' (
+'player_id' INTEGER NOT NULL  REFERENCES 'player' ('player_id'),
+'account' TEXT DEFAULT NULL
 );
 
-CREATE TABLE `post` (
-  `id` INTEGER NULL DEFAULT NULL,
-  `reddit_id` INTEGER NULL DEFAULT NULL,
-  `game_id` INTEGER NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (game_id) REFERENCES `game` (`id`)
+CREATE TABLE 'discord' (
+'player_id' INTEGER NOT NULL  REFERENCES 'player' ('player_id'),
+'account' TEXT DEFAULT NULL
 );
