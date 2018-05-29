@@ -70,7 +70,10 @@ class Backend():
     def destroy_db(self):
         '''Drop tables to effectively clear/reset database'''
         for table in self.get_tables():
-            self.execute("drop table {}".format(table))
+            try:
+                self.execute("drop table {}".format(table))
+            except sqlite3.OperationalError:
+                pass
         self.commit()
 
     # def backup_db(self):
@@ -96,6 +99,8 @@ class Backend():
         '''Function to sanity check that tables exist in the database'''
         tables = self.get_tables()
         if tables:
+            if len(tables) == 1 and tables[0] == 'sqlite_sequence':
+                return False
             return True
         else:
             return False
@@ -123,15 +128,15 @@ class Backend():
 
     def get_player_id(self, fullname=None, email=None, phone=None, reddit=None, discord=None):
         if fullname:
-            self.execute("select id from player where fullname == ?", (fullname,))
+            self.execute("select player_id from player where fullname == ?", (fullname,))
         elif email:
-            self.execute("select id from player where email == ?", (email,))
+            self.execute("select player_id from player where email == ?", (email,))
         elif phone:
-            self.execute("select id from player where fullname == ?", (fullname,))
+            self.execute("select player_id from player where fullname == ?", (fullname,))
         elif reddit:
-            self.execute("select id from player inner join reddit where player.id = reddit.player_id and reddit.account == ?", (reddit,))
+            self.execute("select player.player_id from player inner join reddit where player.player_id = reddit.player_id and reddit.account == ?", (reddit,))
         elif discord:
-            self.execute("select id from player inner join discord where player.id = discord.player_id and discord.account == ?", (discord,))
+            self.execute("select player.player_id from player inner join discord where player.player_id = discord.player_id and discord.account == ?", (discord,))
         return self.get_1_col_result()
 
     def associate_social_with_player(self, player_id, account, act_type):
@@ -158,11 +163,11 @@ class Backend():
 
     def get_game_id(self, date=None, vtt=None):
         if date and vtt:
-            self.execute("select id from game where datetime like '%{}%' and vtt = ?".format(date), (vtt,))
+            self.execute("select game_id from game where datetime like '%{}%' and vtt = ?".format(date), (vtt,))
         elif date:
-            self.execute("select id from game where datetime like '%{}%'".format(date))
+            self.execute("select game_id from game where datetime like '%{}%'".format(date))
         # elif vtt: # doesn't seem useful
-        #     self.execute("select id from game where vtt = ?", (vtt,))
+        #     self.execute("select game_id from game where vtt = ?", (vtt,))
         return self.get_1_col_result()
 
     def get_all_games(self):
@@ -174,7 +179,7 @@ class Backend():
             if date and time:
                 dt = datetime.combine(date, time)
             else:
-                self.execute("select datetime from game where id = ?", (game_id,))
+                self.execute("select datetime from game where game_id = ?", (game_id,))
                 old_dt = self.fetchall()[0][0]
                 old_date = old_dt.date()
                 old_time = old_dt.time()
@@ -182,17 +187,17 @@ class Backend():
                     dt = datetime.combine(date, old_time)
                 else:
                     dt = datetime.combine(old_date, time)
-            self.execute("update game set (datetime) = (?) where id = ?", (dt, game_id))
+            self.execute("update game set datetime = ? where game_id = ?", (dt, game_id))
         if location:
-            self.execute("update game set (location) = (?) where id = ?", (location, game_id))
+            self.execute("update game set location = ? where game_id = ?", (location, game_id))
         if vtt != None:
-            self.execute("update game set (vtt) = (?) where id = ?", (vtt, game_id))
+            self.execute("update game set vtt = ? where game_id = ?", (vtt, game_id))
         if status:
-            self.execute("update game set (status) = (?) where id = ?", (status, game_id))
+            self.execute("update game set status = ? where game_id = ?", (status, game_id))
         self.commit()
 
     def add_dm_to_game(self, player_id, game_id):
-        self.execute("insert into game_dms (game_id, dm_id) values (?, ?)", (game_id, player_id))
+        self.execute("insert into game_dms (game_id, player_id) values (?, ?)", (game_id, player_id))
         self.commit()
 
     def add_character_to_game(self, character_id, game_id):
@@ -209,7 +214,7 @@ class Backend():
         return [dm_ids, player_ids]
 
     def get_dms(self, game_id):
-        self.execute("select id from player inner join game_dms where player.id = game_dms.dm_id and game_dms.game_id == ?", (game_id,))
+        self.execute("select game_dms.player_id from player inner join game_dms where player.player_id = game_dms.player_id and game_dms.game_id == ?", (game_id,))
         return self.get_1_col_result()
 
     def get_players(self):
@@ -220,7 +225,7 @@ class Backend():
         return len(self.get_players())
 
     def get_players_of_game(self, game_id):
-        self.execute("select player_id from character inner join game_pcs where character.id = game_pcs.character_id and game_pcs.game_id == ?", (game_id,))
+        self.execute("select player_id from character inner join game_pcs where character.character_id = game_pcs.character_id and game_pcs.game_id == ?", (game_id,))
         return self.get_1_col_result()
 
     def add_character_to_player(self, player_id, name):
@@ -228,11 +233,11 @@ class Backend():
         self.commit()
 
     def get_character_id(self, player_id, name):
-        self.execute("select id from character where player_id = ? and name = ?", (player_id, name))
+        self.execute("select character_id from character where player_id = ? and name = ?", (player_id, name))
         return self.get_1_col_result()
 
     def get_characters(self, player_id):
-        self.execute("select id, name from character where player_id == ?", (player_id,))
+        self.execute("select character_id, name from character where player_id == ?", (player_id,))
         pcs = self.fetchall()
         return pcs
 

@@ -34,7 +34,7 @@ async def make_admin(ctx, player=None):
     if not player:
         player = ctx.message.author
 
-    if bot.backend.check_admin(bot.backend.get_player_id(discord=player))    
+    # if bot.backend.check_admin(bot.backend.get_player_id(discord=player))    
 
     await ctx.send('{} is now an administrator! Use your power wisely.'.format(player))
     # what's the password? https://github.com/pyotp/pyotp
